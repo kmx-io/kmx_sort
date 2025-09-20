@@ -89,9 +89,11 @@ int main (int argc, char **argv)
   qsort(str, str_count, sizeof(str[0]), str_compare);
   i = 0;
   while (i < str_count) {
-    if (fwrite(str[i].str_ptr, str[i].str_size, 1, stdout) < 0 ||
-        fwrite("\n", 1, 1, stdout) < 0)
-      error("sort: fwrite stdout");
+    if (! g_unique || ! i || str_compare(str + i - 1, str + i)) {
+      if (fwrite(str[i].str_ptr, str[i].str_size, 1, stdout) < 0 ||
+          fwrite("\n", 1, 1, stdout) < 0)
+        error("sort: fwrite stdout");
+    }
     i++;
   }
   fflush(stdout);
