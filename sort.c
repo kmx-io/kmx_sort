@@ -94,7 +94,7 @@ static int rope_compare (const s_rope *a, const s_rope *b)
   if (! b)
     return 1;
   len = a->len < b->len ? a->len : b->len;
-  if ((r = strncmp(a->str, b->str, len)))
+  if ((r = memcmp(a->str, b->str, len)))
     return r;
   if (a->len < b->len)
     return -1;
