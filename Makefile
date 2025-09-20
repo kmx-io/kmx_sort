@@ -23,9 +23,12 @@ OBJS_DEBUG = sort.debug.o
 
 DIST = ${PROG}-${VERSION}
 
-CFLAGS = -W -Wall -Werror -std=c89 -pedantic -O2 -pipe
+COMMON_CFLAGS = -W -Wall -Werror -std=c89 -pedantic
+COMMON_CFLAGS += -D_POSIX_C_SOURCE=200809 # make glibc happy
 
-CFLAGS_DEBUG = -W -Wall -Werror -std=c89 -pedantic -g -O0
+CFLAGS = ${COMMON_CFLAGS} -O2 -pipe
+
+CFLAGS_DEBUG = ${COMMON_CFLAGS} -g -O0
 
 CLEANFILES = *.o ${PROG} ${PROG_DEBUG} ${DIST}.tar.gz
 

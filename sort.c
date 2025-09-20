@@ -121,7 +121,7 @@ static void rope_delete_all (s_rope *rope)
 static s_rope ** rope_insert_sorted (s_rope **rope, char *str,
                                      size_t len)
 {
-  int c;
+  int c = 1;
   s_rope **cursor;
   s_rope *tmp;
   if (! (tmp = calloc(1, sizeof(s_rope))))
