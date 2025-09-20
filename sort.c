@@ -31,6 +31,7 @@ static s_rope ** rope_insert_sorted (s_rope **rope, char *str,
 static void usage (void);
 
 static const char *g_argv0 = "sort";
+static int         g_unique = 0;
 
 static void error (const char *message)
 {
@@ -46,8 +47,14 @@ int main (int argc, char **argv)
   if (! argc || ! argv || ! argv[0])
     usage();
   g_argv0 = argv[0];
-  if (argc > 1)
-    usage();
+  if (argc > 1) {
+    if (argc > 2)
+      usage();
+    if (argv[1][0] == '-' &&
+        argv[1][1] == 'u' &&
+        ! argv[1][2])
+      g_unique = 1;
+  }
   while (1) {
     str = NULL;
     str_len = 0;
@@ -114,6 +121,7 @@ static void rope_delete_all (s_rope *rope)
 static s_rope ** rope_insert_sorted (s_rope **rope, char *str,
                                      size_t len)
 {
+  int c;
   s_rope **cursor;
   s_rope *tmp;
   if (! (tmp = calloc(1, sizeof(s_rope))))
@@ -121,10 +129,21 @@ static s_rope ** rope_insert_sorted (s_rope **rope, char *str,
   tmp->str = str;
   tmp->len = len;
   cursor = rope;
-  while (*cursor && rope_compare(*cursor, tmp) < 0)
+  while (*cursor &&
+         (c = rope_compare(*cursor, tmp)) < 0)
     cursor = &(*cursor)->next;
-  tmp->next = *cursor;
-  *cursor = tmp;
+  if (g_unique) {
+    if (c) {
+      tmp->next = *cursor;
+      *cursor = tmp;
+    }
+    else
+      rope_delete(tmp);
+  }
+  else {
+    tmp->next = *cursor;
+    *cursor = tmp;
+  }
   return rope;
 }
 
