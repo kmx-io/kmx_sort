@@ -72,7 +72,7 @@ ${PROG}: ${OBJS}
 	${CC} ${CFLAGS} ${OBJS} ${LDFLAGS} -o ${PROG}
 
 ${PROG_DEBUG}: ${OBJS_DEBUG}
-	${CC} ${CFLAGS} ${OBJS_DEBUG} ${LDFLAGS} -o ${PROG_DEBUG}
+	${CC} ${CFLAGS_DEBUG} ${OBJS_DEBUG} ${LDFLAGS} -o ${PROG_DEBUG}
 
 uninstall:
 	rm -f ${bindir}/${PROG}
