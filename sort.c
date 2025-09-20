@@ -66,7 +66,7 @@ int main (int argc, char **argv)
       break;
     if (line[line_len - 1] == '\n') {
       line[--line_len] = 0;
-      if (line[line_len - 1] == '\r')
+      if (line_len > 0 && line[line_len - 1] == '\r')
         line[--line_len] = 0;
     }
     if (i >= str_max) {
@@ -81,23 +81,23 @@ int main (int argc, char **argv)
     str[i].str_size = line_len;
     i++;
   }
-  if (ferror(stdin) || ! feof(stdin)) {
-    free(str);
+  if (ferror(stdin) || ! feof(stdin))
     error("sort: getline");
-  }
   str_count = i;
-  qsort(str, str_count, sizeof(str[0]), str_compare);
-  i = 0;
-  while (i < str_count) {
-    if (! g_unique || ! i || str_compare(str + i - 1, str + i)) {
-      if ((str[i].str_size &&
-           fwrite(str[i].str_ptr, str[i].str_size, 1, stdout) <= 0) ||
-          fwrite("\n", 1, 1, stdout) <= 0)
-        error("sort: fwrite stdout");
+  if (str_count) {
+    qsort(str, str_count, sizeof(str[0]), str_compare);
+    i = 0;
+    while (i < str_count) {
+      if (! g_unique || ! i || str_compare(str + i - 1, str + i)) {
+	if ((str[i].str_size &&
+	     fwrite(str[i].str_ptr, str[i].str_size, 1, stdout) <= 0) ||
+	    fwrite("\n", 1, 1, stdout) <= 0)
+	  error("sort: fwrite stdout");
+      }
+      i++;
     }
-    i++;
+    fflush(stdout);
   }
-  fflush(stdout);
   return 0;
 }
 
