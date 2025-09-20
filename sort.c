@@ -90,8 +90,9 @@ int main (int argc, char **argv)
   i = 0;
   while (i < str_count) {
     if (! g_unique || ! i || str_compare(str + i - 1, str + i)) {
-      if (fwrite(str[i].str_ptr, str[i].str_size, 1, stdout) < 0 ||
-          fwrite("\n", 1, 1, stdout) < 0)
+      if ((str[i].str_size &&
+           fwrite(str[i].str_ptr, str[i].str_size, 1, stdout) <= 0) ||
+          fwrite("\n", 1, 1, stdout) <= 0)
         error("sort: fwrite stdout");
     }
     i++;
