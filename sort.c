@@ -14,20 +14,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct rope s_rope;
-
-struct rope {
-  char *str;
-  size_t len;
-  s_rope *next;
-};
+typedef struct str {
+  char  *str_ptr;
+  size_t str_size;
+} s_str;
 
 static void error (const char *message);
-static int       rope_compare (const s_rope *a, const s_rope *b);
-static s_rope *  rope_delete (s_rope *rope);
-static void      rope_delete_all (s_rope *rope);
-static s_rope ** rope_insert_sorted (s_rope **rope, char *str,
-                                     size_t len);
+static int str_compare (const void *a, const void *b);
 static void usage (void);
 
 static const char *g_argv0 = "sort";
@@ -41,9 +34,15 @@ static void error (const char *message)
 
 int main (int argc, char **argv)
 {
-  s_rope *rope = NULL;
-  char *str;
-  size_t str_len;
+  size_t i;
+  char   *line;
+  ssize_t line_len;
+  size_t  line_size;
+  s_str *str;
+  size_t str_count;
+  size_t str_max;
+  s_str *str2;
+  size_t str2_max;
   if (! argc || ! argv || ! argv[0])
     usage();
   g_argv0 = argv[0];
@@ -54,101 +53,73 @@ int main (int argc, char **argv)
         argv[1][1] == 'u' &&
         ! argv[1][2])
       g_unique = 1;
+    else
+      usage();
   }
+  str_max = 512;
+  str = calloc(str_max, sizeof(s_str));
+  i = 0;
   while (1) {
-    str = NULL;
-    str_len = 0;
-    if (getline(&str, &str_len, stdin) <= 0)
+    line = NULL;
+    line_size = 0;
+    if ((line_len = getline(&line, &line_size, stdin)) <= 0)
       break;
-    if (str[str_len - 1] == '\n') {
-      str[--str_len] = 0;
-      if (str[str_len - 1] == '\r')
-        str[--str_len] = 0;
+    if (line[line_len - 1] == '\n') {
+      line[--line_len] = 0;
+      if (line[line_len - 1] == '\r')
+        line[--line_len] = 0;
     }
-    if (! rope_insert_sorted(&rope, str, str_len))
-      error("sort: rope_insert_sorted");
+    if (i >= str_max) {
+      str2_max = str_max + 512;
+      str2 = calloc(str2_max, sizeof(s_str));
+      memcpy(str2, str, str_max * sizeof(s_str));
+      free(str);
+      str = str2;
+      str_max = str2_max;
+    }
+    str[i].str_ptr = line;
+    str[i].str_size = line_len;
+    i++;
   }
   if (ferror(stdin) || ! feof(stdin)) {
-    rope_delete_all(rope);
+    free(str);
     error("sort: getline");
   }
-  while (rope) {
-    if (fputs(rope->str, stdout) < 0) {
-      rope_delete_all(rope);
-      error("sort: fputs stdout");
-    }
-    rope = rope_delete(rope);
+  str_count = i;
+  qsort(str, str_count, sizeof(str[0]), str_compare);
+  i = 0;
+  while (i < str_count) {
+    if (fwrite(str[i].str_ptr, str[i].str_size, 1, stdout) < 0 ||
+        fwrite("\n", 1, 1, stdout) < 0)
+      error("sort: fwrite stdout");
+    i++;
   }
   fflush(stdout);
   return 0;
 }
 
-static int rope_compare (const s_rope *a, const s_rope *b)
+static int str_compare (const void *a, const void *b)
 {
   size_t len;
   int r;
-  if (a == b)
-    return 0;
-  if (! a)
-    return -1;
-  if (! b)
-    return 1;
-  len = (a->len < b->len) ? a->len : b->len;
-  if ((r = memcmp(a->str, b->str, len)))
+  const s_str *str_a;
+  const s_str *str_b;
+  str_a = a;
+  str_b = b;
+  len = (str_a->str_size < str_b->str_size) ?
+    str_a->str_size :
+    str_b->str_size;
+  if ((r = memcmp(str_a->str_ptr, str_b->str_ptr, len)))
     return r;
-  if (a->len < b->len)
+  if (str_a->str_size < str_b->str_size)
     return -1;
-  if (a->len > b->len)
+  if (str_a->str_size > str_b->str_size)
     return 1;
   return 0;
 }
 
-static s_rope * rope_delete (s_rope *rope)
-{
-  s_rope *next;
-  next = rope->next;
-  free(rope->str);
-  free(rope);
-  return next;
-}
-
-static void rope_delete_all (s_rope *rope)
-{
-  while (rope)
-    rope = rope_delete(rope);
-}
-
-static s_rope ** rope_insert_sorted (s_rope **rope, char *str,
-                                     size_t len)
-{
-  int c = 1;
-  s_rope **cursor;
-  s_rope *tmp;
-  if (! (tmp = calloc(1, sizeof(s_rope))))
-    error("sort: rope_new: calloc s_rope");
-  tmp->str = str;
-  tmp->len = len;
-  cursor = rope;
-  while (*cursor &&
-         (c = rope_compare(*cursor, tmp)) < 0)
-    cursor = &(*cursor)->next;
-  if (g_unique) {
-    if (c) {
-      tmp->next = *cursor;
-      *cursor = tmp;
-    }
-    else
-      rope_delete(tmp);
-  }
-  else {
-    tmp->next = *cursor;
-    *cursor = tmp;
-  }
-  return rope;
-}
-
 static void usage (void)
 {
-  fprintf(stderr, "Usage: %s\n", g_argv0);
+  fprintf(stderr, "Usage: %s [-u]\n", g_argv0);
   exit(1);
 }
