@@ -1,7 +1,10 @@
-# sort v0.1
+# kmx.io/sort v0.2-git
 
 Portable sort order using memcmp and strlen for lexicographical order
 without collation.
+
+This is a development branch, for a stable release see
+[kmx.io/sort v0.1](https://git.kmx.io/kmx.io/sort/_tree/v0.1/)
 
 ## Usage
 
