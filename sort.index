@@ -1,0 +1,6 @@
+configure
+.gitignore
+Makefile
+README.md
+sort.c
+sort.index

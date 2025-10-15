@@ -1,4 +1,6 @@
 configure.mk
 *.o
+release/
 sort
+sort-*/
 sort_debug

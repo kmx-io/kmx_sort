@@ -14,7 +14,7 @@
 PROG = sort
 PROG_DEBUG = sort_debug
 
-VERSION = 0.1-git
+VERSION = 0.1
 
 SRCS = sort.c
 
