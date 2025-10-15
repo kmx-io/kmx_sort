@@ -38,19 +38,13 @@ bindir = ${prefix}/bin
 
 all: build debug
 
+include configure.mk
+
 build: ${PROG}
 
 clean:
 	rm -f ${CLEANFILES}
 	rm -rf ${DIST}
-
-.c.o:
-	${CC} ${CFLAGS} -c $< -o $@
-
-.SUFFIXES: .debug.o
-
-.c.debug.o:
-	${CC} ${CFLAGS_DEBUG} -c $< -o $@
 
 debug: ${PROG_DEBUG}
 
@@ -76,6 +70,12 @@ ${PROG}: ${OBJS}
 
 ${PROG_DEBUG}: ${OBJS_DEBUG}
 	${CC} ${CFLAGS_DEBUG} ${OBJS_DEBUG} ${LDFLAGS} -o ${PROG_DEBUG}
+
+sort.o: ${src_dir}/sort.c
+	${CC} ${CFLAGS} -c ${src_dir}/sort.c -o sort.o
+
+sort.debug.o: ${src_dir}/sort.c
+	${CC} ${CFLAGS_DEBUG} -c ${src_dir}/sort.c -o sort.debug.o
 
 uninstall:
 	rm -f ${bindir}/${PROG}
