@@ -1,0 +1,28 @@
+#!/bin/sh
+## sort
+## Copyright 2025 kmx.io <contact@kmx.io>
+##
+## Permission is hereby granted to use this software granted the above
+## copyright notice and this permission paragraph are included in all
+## copies and substantial portions of this software.
+##
+## THIS SOFTWARE IS PROVIDED "AS-IS" WITHOUT ANY GUARANTEE OF
+## PURPOSE AND PERFORMANCE. IN NO EVENT WHATSOEVER SHALL THE
+## AUTHOR BE CONSIDERED LIABLE FOR THE USE AND PERFORMANCE OF
+## THIS SOFTWARE.
+
+SRC_DIR="$(dirname "$0")"
+BUILD_DIR="$PWD"
+
+if [ "x$1" = "x--prefix" ]; then
+    PREFIX="$2"
+    shift 2
+fi
+
+echo "# gen by configure"  > configure.mk
+echo "prefix  = $PREFIX"  >> configure.mk
+echo "src_dir = $SRC_DIR" >> configure.mk
+
+if [ "x$SRC_DIR" != "x." ]; then
+    cp "$SRC_DIR"/Makefile ./
+fi

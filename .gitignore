@@ -1,3 +1,4 @@
+configure.mk
 *.o
 sort
 sort_debug
