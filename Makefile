@@ -63,7 +63,6 @@ gdb: debug
 install:
 	install -d -m 0755 ${DESTDIR}${bindir}
 	install -m 0755 ${PROG} ${DESTDIR}${bindir}/${PROG}
-	install -m 0755 ${PROG_DEBUG} ${DESTDIR}${bindir}/${PROG_DEBUG}
 
 ${PROG}: ${OBJS}
 	${CC} ${CFLAGS} ${OBJS} ${LDFLAGS} -o ${PROG}
@@ -79,6 +78,5 @@ sort.debug.o: ${src_dir}/sort.c
 
 uninstall:
 	rm -f ${bindir}/${PROG}
-	rm -f ${bindir}/${PROG_DEBUG}
 
 .PHONY: all build clean debug dist ${DIST}.tar.gz gdb
