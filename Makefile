@@ -14,7 +14,7 @@
 PROG = kmx_sort
 PROG_DEBUG = kmx_sort_debug
 
-VERSION = 0.2-git
+VERSION = 0.2
 
 SRCS = kmx_sort.c
 

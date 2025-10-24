@@ -1,10 +1,9 @@
-# kmx.io/sort v0.2-git
+# kmx.io/kmx_sort v0.2
 
-Portable sort order using memcmp and strlen for lexicographical order
-without collation.
+Portable sort order using memcmp and strlen.
 
-This is a development branch, for a stable release see
-[kmx.io/sort v0.1](https://git.kmx.io/kmx.io/sort/_tree/v0.1/)
+This is a stable release, for a development branch see
+[kmx.io/kmx_sort](https://git.kmx.io/kmx.io/kmx_sort/)
 
 ## Usage
 
@@ -25,7 +24,7 @@ make install
 
 ## License
 
-> sort
+> kmx_sort
 >
 > Copyright 2025 kmx.io <contact@kmx.io>
 >
@@ -40,6 +39,9 @@ make install
 > THIS SOFTWARE.
 
 ## Authors
+
+ - v0.2
+   - Thomas de Grivel <thoxdg@gmail.com>
 
  - v0.1
    - Thomas de Grivel <thoxdg@gmail.com>
