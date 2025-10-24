@@ -1,4 +1,4 @@
-/* sort
+/* kmx_sort
  * Copyright 2025 kmx.io <contact@kmx.io>
  *
  * Permission is hereby granted to use, modify and redistribute this
@@ -24,7 +24,7 @@ static void error (const char *message);
 static int str_compare (const void *a, const void *b);
 static void usage (void);
 
-static const char *g_argv0 = "sort";
+static const char *g_argv0 = "kmx_sort";
 static int         g_unique = 0;
 
 static void error (const char *message)
@@ -83,7 +83,7 @@ int main (int argc, char **argv)
     i++;
   }
   if (ferror(stdin) || ! feof(stdin))
-    error("sort: getline");
+    error("kmx_sort: getline");
   str_count = i;
   if (str_count) {
     qsort(str, str_count, sizeof(str[0]), str_compare);
@@ -93,7 +93,7 @@ int main (int argc, char **argv)
 	if ((str[i].str_size &&
 	     fwrite(str[i].str_ptr, str[i].str_size, 1, stdout) <= 0) ||
 	    fwrite("\n", 1, 1, stdout) <= 0)
-	  error("sort: fwrite stdout");
+	  error("kmx_sort: fwrite stdout");
       }
       i++;
     }

@@ -1,4 +1,4 @@
-## sort
+## kmx_sort
 ## Copyright 2025 kmx.io <contact@kmx.io>
 ##
 ## Permission is hereby granted to use, modify and redistribute this
@@ -11,16 +11,16 @@
 ## AUTHOR BE CONSIDERED LIABLE FOR THE USE AND PERFORMANCE OF
 ## THIS SOFTWARE.
 
-PROG = sort
-PROG_DEBUG = sort_debug
+PROG = kmx_sort
+PROG_DEBUG = kmx_sort_debug
 
 VERSION = 0.2-git
 
-SRCS = sort.c
+SRCS = kmx_sort.c
 
-OBJS = sort.o
+OBJS = kmx_sort.o
 
-OBJS_DEBUG = sort.debug.o
+OBJS_DEBUG = kmx_sort.debug.o
 
 DIST = ${PROG}-${VERSION}
 
@@ -71,11 +71,11 @@ ${PROG}: ${OBJS}
 ${PROG_DEBUG}: ${OBJS_DEBUG}
 	${CC} ${CFLAGS_DEBUG} ${OBJS_DEBUG} ${LDFLAGS} -o ${PROG_DEBUG}
 
-sort.o: ${src_dir}/sort.c
-	${CC} ${CFLAGS} -c ${src_dir}/sort.c -o sort.o
+kmx_sort.o: ${src_dir}/kmx_sort.c
+	${CC} ${CFLAGS} -c ${src_dir}/kmx_sort.c -o kmx_sort.o
 
-sort.debug.o: ${src_dir}/sort.c
-	${CC} ${CFLAGS_DEBUG} -c ${src_dir}/sort.c -o sort.debug.o
+kmx_sort.debug.o: ${src_dir}/kmx_sort.c
+	${CC} ${CFLAGS_DEBUG} -c ${src_dir}/kmx_sort.c -o kmx_sort.debug.o
 
 uninstall:
 	rm -f ${bindir}/${PROG}

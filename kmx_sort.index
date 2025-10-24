@@ -2,5 +2,5 @@ configure
 .gitignore
 Makefile
 README.md
-sort.c
-sort.index
+kmx_sort.c
+kmx_sort.index

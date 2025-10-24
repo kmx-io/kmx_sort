@@ -1,6 +1,6 @@
 configure.mk
+kmx_sort
+kmx_sort-*/
+kmx_sort_debug
 *.o
 release/
-sort
-sort-*/
-sort_debug
